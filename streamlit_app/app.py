@@ -435,13 +435,27 @@ EXP_MAP    = {"Beginner": 1, "Intermediate": 2, "Expert": 3}
 RISK_MAP   = {"Low": 1, "Medium": 2, "High": 3}
 LOAN_MAP   = {"No": 0, "Yes": 1}
 
+# Internal defaults for features removed from the UI.
+# These keep the trained model's 49-feature alignment intact.
+DEFAULT_SOIL_TYPE    = "Loamy"         # most common / neutral soil type
+DEFAULT_WEATHER_RISK = "Medium"        # middle-of-the-road risk
+DEFAULT_EXPERIENCE   = "Intermediate"  # middle-of-the-road experience
+
 
 def build_feature_row(
-    land_size, income_level, loan_status, crop_type, irrigation,
-    soil_type, weather_risk, experience, state,
+    land_size, income_level, loan_status, crop_type, irrigation, state,
 ) -> pd.DataFrame:
-    """Encode raw UI inputs and align them to FEATURE_COLUMNS."""
+    """Encode raw UI inputs and align them to FEATURE_COLUMNS.
+
+    Soil type, weather risk and experience are no longer asked in the UI;
+    sensible defaults are injected so the model still receives its full
+    49-column input vector.
+    """
     row = {c: 0 for c in FEATURE_COLUMNS}
+
+    soil_type    = DEFAULT_SOIL_TYPE
+    weather_risk = DEFAULT_WEATHER_RISK
+    experience   = DEFAULT_EXPERIENCE
 
     ls   = LAND_MAP[land_size]
     il   = INCOME_MAP[income_level]
