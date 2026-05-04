@@ -411,7 +411,6 @@ with st.form("farmer_form"):
     with col1:
         land_size = st.selectbox("🌾 Land Size", ["Small", "Medium", "Large"], index=0)
         income_level = st.selectbox("💰 Income Level", ["Low", "Medium", "High"], index=0)
-        loan_status = st.selectbox("🏦 Loan Status", ["No", "Yes"], index=0)
 
     with col2:
         crop_type = st.selectbox(
@@ -420,15 +419,9 @@ with st.form("farmer_form"):
             index=0,
         )
         irrigation = st.selectbox("💧 Irrigation", ["Yes", "No"], index=0)
-        soil_type = st.selectbox(
-            "🪴 Soil Type", ["Sandy", "Clay", "Loamy", "Black"], index=2
-        )
 
     with col3:
-        weather_risk = st.selectbox("🌦️ Weather Risk", ["Low", "Medium", "High"], index=0)
-        experience = st.selectbox(
-            "👨‍🌾 Experience", ["Beginner", "Intermediate", "Expert"], index=1
-        )
+        loan_status = st.selectbox("🏦 Loan Status", ["No", "Yes"], index=0)
         state = st.selectbox("📍 State", ["Punjab", "UP", "MP", "MH", "Bihar"], index=0)
 
     submitted = st.form_submit_button("🔍 Predict Recommended Scheme")
@@ -486,7 +479,7 @@ if submitted:
         try:
             X = build_feature_row(
                 land_size, income_level, loan_status, crop_type,
-                irrigation, soil_type, weather_risk, experience, state,
+                irrigation, state,
             )
             proba = model.predict_proba(X)[0]
             classes = label_encoder.classes_
@@ -506,9 +499,6 @@ if submitted:
                 "Loan Status": loan_status,
                 "Crop Type": crop_type,
                 "Irrigation": irrigation,
-                "Soil Type": soil_type,
-                "Weather Risk": weather_risk,
-                "Experience": experience,
                 "State": state,
             }
             # Reset toggles on new prediction
